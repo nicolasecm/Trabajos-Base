@@ -1,0 +1,5 @@
+<meta>
+<info author="Mcnciolas208" name="Trabajos Base" version="2.0" type="script" />
+	<script src="client.lua" type="client"/>
+	<script src="server.lua" type="server"/>
+</meta>
