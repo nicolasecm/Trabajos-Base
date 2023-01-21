@@ -1,37 +1,28 @@
-exports [ "scoreboard" ]:scoreboardAddColumn ( "Ocupacion", getRootElement(), 150, name, 10 )
+exports [ "scoreboard" ]:scoreboardAddColumn ( "Ocupacion", getRootElement(), 200, name, 10 )
 
 createTeam ( "Trabajadores", 229, 236, 17 )
 createTeam ( "Criminales", 255, 0, 0 )
-createTeam ( "Policias",0, 92, 198)
+createTeam ( "Policias", 0, 92, 198)
 
-addEventHandler("onPlayerLogin", root, 
-function ()
+addEventHandler("onPlayerLogin", root, function ()
 	setElementData (source, "Cuenta", getAccountName(getPlayerAccount(source)))
 	setTimer (function (source)
-		local Lv = getElementData(source, "Ocupacion")
-		local Rs = getElementData(source, "SkinF")
 		local Vt = getElementData(source, "VehiTrabajo")
-		if Lv and tonumber(Lv) ~= nil then else
-			setElementData  (source, "Ocupacion", "Civil")
-		end
-		if Rs and tonumber(Rs) ~= nil then else
-			setElementData  (source, "SkinF", 0)
-		end
 		if Vt and tonumber(Vt) ~= nil then else
 			setElementData  (source, "VehiTrabajo", 0)
 		end
-	end, 1000, 1, source)
+	end, 2000, 1, source)
 end)
 
 function cambioCivil(source)
-	local cambio = getElementData (source,"SkinF") or 0
+	local cambio = getElementData (source,"SkinSave") or 0
 	local Veh = getElementData(source ,"VehId")
 	local team = getTeamFromName("Trabajadores")
 	if(isPedInVehicle (source)) then
-		outputChatBox("[Trabajo]#ffffffNo puedes usar este comando en un vehiculo",source, 255,0,0,true)
+		addNotificationS(source, "Trabajo: No puedes usar este comando en un vehiculo", "error")
 	else
 		if isElement(Veh)then
-			outputChatBox("[Trabajo]#ffffffEspera a que se destruya tu vehiculo",source, 255,0,0,true)
+			addNotificationS(source, "Trabajo: Espera a que se destruya tu vehiculo", "error")
 		else
 			if (getElementData(source ,"VehiTrabajo") == 1)then
 				setElementData(source,"VehiTrabajo", 0)
@@ -45,9 +36,13 @@ function cambioCivil(source)
 				setElementData (source, "Ocupacion", "Civil")
 				setElementModel(source,cambio)
 				setPlayerTeam( source, team)
-				setPlayerNametagColor (source, 229, 236, 17 )
+				setPlayerNametagColor (source, 229, 236, 17)
 			end
 		end
 	end
 end
 addCommandHandler("civil", cambioCivil)
+
+function addNotificationS(player, msg, type)
+	triggerClientEvent( player, "addNotificationServer", player, msg, type )
+end
